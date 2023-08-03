@@ -7,11 +7,21 @@ import ThemeProvider from './theme';
 // components
 import { StyledChart } from './components/chart';
 import ScrollToTop from './components/scroll-to-top';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 // ----------------------------------------------------------------------
 
 export default function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      }
+    }
+  });
+
   return (
+    <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <BrowserRouter>
         <ThemeProvider>
@@ -20,6 +30,7 @@ export default function App() {
           <Router />
         </ThemeProvider>
       </BrowserRouter>
-    </HelmetProvider>
+      </HelmetProvider>
+    </QueryClientProvider>
   );
 }

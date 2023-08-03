@@ -18,5 +18,6 @@ export default function ProductList({ products, ...other }) {
         </Grid>
       ))}
     </Grid>
+    
   );
 }

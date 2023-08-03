@@ -8,9 +8,9 @@ import Iconify from '../../../components/iconify';
 
 const SORT_BY_OPTIONS = [
   { value: 'featured', label: 'Featured' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'priceDesc', label: 'Price: High-Low' },
-  { value: 'priceAsc', label: 'Price: Low-High' },
+  { value: 'newest', label: 'Mới nhất' },
+  { value: 'priceDesc', label: 'Giá: cao-thấp' },
+  { value: 'priceAsc', label: 'Giá: thấp-cao' },
 ];
 
 export default function ShopProductSort() {
@@ -32,9 +32,9 @@ export default function ShopProductSort() {
         onClick={handleOpen}
         endIcon={<Iconify icon={open ? 'eva:chevron-up-fill' : 'eva:chevron-down-fill'} />}
       >
-        Sort By:&nbsp;
+        Sắp xếp theo:&nbsp;
         <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          Newest
+          Mới nhất
         </Typography>
       </Button>
       <Menu

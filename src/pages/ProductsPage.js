@@ -1,16 +1,39 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, Pagination } from '@mui/material';
 // components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
-import PRODUCTS from '../_mock/products';
+import { useEffect } from 'react';
+import { getAllBirds } from '../api/bird';
 
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
+  const itemPerPage = 16;
+
+  const [data, setData] = useState([]);
   const [openFilter, setOpenFilter] = useState(false);
+  const [page, setPage] = useState(1);
+  const totalBirds = data.length;
+  const totalPages = Math.ceil(totalBirds / itemPerPage);
+
+  useEffect(() => { 
+    const fetchData = async () => {
+      try {
+        const resp = await getAllBirds(page, itemPerPage);
+        // const jsonData = await resp.dat
+        setData(resp.data.result.birds);
+        console.log(resp.data.result.birds);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
+
+  }, [])
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -20,15 +43,24 @@ export default function ProductsPage() {
     setOpenFilter(false);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  }
+
+  const stantIndex = (page - 1) * itemPerPage;
+  const endIndex = Math.min(stantIndex + itemPerPage, totalBirds);
+
+  const currentBirds = data.slice(stantIndex, endIndex);
+
   return (
     <>
       <Helmet>
-        <title> Dashboard: Products | Minimal UI </title>
+        <title> Chim </title>
       </Helmet>
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Chim
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
@@ -42,8 +74,17 @@ export default function ProductsPage() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <Pagination
+          componentName='ProductsPage'
+          count={totalPages}
+          page={page}
+          onChange={handleChangePage}
+          color="primary"
+          sx={{ mb: 5, justifyContent: 'center', display: 'flex' }}
+        />
+        <ProductList products={currentBirds} />
         <ProductCartWidget />
+
       </Container>
     </>
   );
